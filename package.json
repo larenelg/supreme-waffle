@@ -1,0 +1,14 @@
+{
+  "name": "larelevator",
+  "version": "1.0.0",
+  "description": "dcc code test first go",
+  "main": "src/app.js",
+  "author": "Larene LG <wanagram@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "node src/app.js"
+  },
+  "devDependencies": {
+    "jasmine": "^3.0.0"
+  }
+}
