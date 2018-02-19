@@ -4,4 +4,11 @@ module.exports = class Passenger {
     this.hasReachedDestination = true; // true until passenger summons elevator
     this.elevator = elevator;
   }
+
+  presses (directionButton) { return this; }
+  waitForDoorsToOpenAt (floor) { return this; }
+  enterElevator () { return this; }
+  presses (destinationButton) { return this; }
+  exitElevator () { return this; }
 }
+

@@ -1,5 +1,3 @@
-"use strict";
-
 const Elevator = require('./elevator');
 const Passenger = require('./passenger');
 
@@ -13,12 +11,12 @@ describe('elevator app', () => {
   it('test case 0: initialisation', () => {
     var passenger = new Passenger('G', elevator);
 
-    expect(passenger.hasReachedDestination).toBeTrue(); // not set until they press a button
+    expect(passenger.hasReachedDestination).toBe(true); // not set until they press a button
     expect(passenger.currentFloor).toBe('G');
-    expect(elevator.isWaiting).toBeTrue();
+    expect(elevator.isWaiting).toBe(true);
   });
 
-  xit('test case 1: passenger travels from G to 5', () => {
+  it('test case 1: passenger travels from G to 5', () => {
     var passenger = new Passenger('G', elevator);
 
     passenger.presses('Up')
@@ -28,6 +26,6 @@ describe('elevator app', () => {
       .waitForDoorsToOpenAt('5')
       .exitElevator();
 
-    expect(passenger.hasReachedDestination).toBeTrue();
+    expect(passenger.hasReachedDestination).toBe(true);
   });
 });
