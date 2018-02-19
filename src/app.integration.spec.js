@@ -21,9 +21,11 @@ describe('elevator app', () => {
     expect(elevator.isWaiting).toBe(true);
   });
 
+  // TODO: failing test, make it green!
   it('test case 1: passenger travels from G to 5', () => {
     var passenger = new Passenger(elevator, 'G');
 
+    // this is probably not the right design pattern, letting TDD sort it out later
     passenger.presses('Up')
       .waitForDoorsToOpenAt('G')
       .enterElevator()

@@ -52,6 +52,7 @@ $ yarn -v
 * It takes 3 time-steps to travel between floors
 * It takes 3 time-step to open doors, 3 time-step to wait for passengers to board, 3 time-steps to close doors
   - extra homework, ideal elevator kinematics for hoomans?
+  https://www.peters-research.com/images/stories/papers/idealliftkinematics/kinematicsexample.jpg
 
 * The definition of *optimal* instructions (biggest assumption):
   - does this mean anything with _one_ elevator?
