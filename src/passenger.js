@@ -1,12 +1,7 @@
 module.exports = class Passenger {
-  this.prototype.summons = (elevator) => {
-    console.log("ehre");
-    // this.elevator = elevator;
-    return this;
+  constructor (startingFloor, elevator) {
+    this.currentFloor = startingFloor;
+    this.hasReachedDestination = true; // true until passenger summons elevator
+    this.elevator = elevator;
   }
-//
-//  function to = (floor) => {
-//    this.elevator.destinationList.push(floor);
-//    return this;
-//  }
 }
