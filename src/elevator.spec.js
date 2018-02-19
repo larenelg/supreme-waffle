@@ -36,13 +36,14 @@ describe('elevator', () => {
   it('travels down from 6 to G', () => {
     const sixFloorDistance = 6 * DISTANCE_BETWEEN_FLOORS;
     
-    // these shouldn't be exposed, and should be linked together
+    // these shouldn't be exposed, and should be linked together with setters
     elevator.currentFloor = FLOORS[6]
     elevator.currentHeight = sixFloorDistance;
 
     elevator.goToFloor('G');
     
     for (var i = 0; i < sixFloorDistance; i++) {
+      // sixFloorDistance also happens to be the same number of required timeSteps to reach G floor
       elevator.update();
     }
 
