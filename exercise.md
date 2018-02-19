@@ -12,3 +12,5 @@ Some test cases:
 * Passenger 1 summons lift to go up from Ground. They choose L5. Passenger 2 summons lift to go down from L4. Passenger 3 summons lift to go down from L10. Passengers 2 and 3 choose to travel to Ground.
 
 You can implement this in any language you like and submit a working solution including tests and a readme explaining how to run it. Submissions on GitHub or BitBucket preferred.
+
+(Source: Damian M)
