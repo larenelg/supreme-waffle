@@ -10,10 +10,11 @@ Assumptions
   - doors closing
 * The elevator always starts at G, and remains on last level it travelled to
 * A passenger can indicate they want to go up or down(?) on levels 1 to 9; can only indicate up from G, and down from 10
-* A passenger enters the destination when they enter the lift
-* It takes 5 seconds to travel between floors
-* It takes 5 seconds to stop and open doors, 10 seconds to wait for passengers to board, 5 seconds to close doors
-  - extra homework, what accel/decel is comfortable for hoomans?
+* A passenger enters the destination when they enter the lift (only once)
+* Elevator does not need to indicate which buttons are pressed
+* It takes 1 time-step to travel between floors
+* It takes 1 time-step to stop and open doors, 1 time-step to wait for passengers to board, 1 time-step to close doors
+  - extra homework, ideal elevator kinematics for hoomans?
 
 * The definition of *optimal* instructions (biggest assumption):
   - does this mean anything with _one_ elevator?
