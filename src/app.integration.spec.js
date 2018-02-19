@@ -3,6 +3,8 @@
 const Elevator = require('./elevator');
 const Passenger = require('./passenger');
 
+// timesteps helper
+
 describe('elevator app', () => {
   var elevator;
 
@@ -11,16 +13,16 @@ describe('elevator app', () => {
   });
 
   it('test case 0: initialisation', () => {
-    var passenger = new Passenger('G', elevator);
+    var passenger = new Passenger(elevator, 'G');
 
-    expect(passenger.hasReachedDestination).toBe(true); // not set until they press a button
+    expect(passenger.hasReachedDestination).toBe(false); // not set until they go somewhere
     expect(passenger.currentFloor).toBe('G');
     expect(elevator.currentFloor).toBe('G');
     expect(elevator.isWaiting).toBe(true);
   });
 
   it('test case 1: passenger travels from G to 5', () => {
-    var passenger = new Passenger('G', elevator);
+    var passenger = new Passenger(elevator, 'G');
 
     passenger.presses('Up')
       .waitForDoorsToOpenAt('G')
@@ -29,7 +31,7 @@ describe('elevator app', () => {
       .waitForDoorsToOpenAt('5')
       .exitElevator();
 
-    expect(passenger.hasReachedDestination).toBe(true);
+    expect(passenger.hasReachedDestination).toBe(true); // not implemented
     expect(elevator.isWaiting).toBe(true);
   });
 });

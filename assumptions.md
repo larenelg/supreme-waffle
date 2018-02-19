@@ -12,8 +12,8 @@ Assumptions
 * A passenger can indicate they want to go up or down(?) on levels 1 to 9; can only indicate up from G, and down from 10
 * A passenger enters the destination when they enter the lift (only once)
 * Elevator does not need to indicate which buttons are pressed
-* It takes 1 time-step to travel between floors
-* It takes 1 time-step to stop and open doors, 1 time-step to wait for passengers to board, 1 time-step to close doors
+* It takes 3 time-steps to travel between floors
+* It takes 3 time-step to open doors, 3 time-step to wait for passengers to board, 3 time-steps to close doors
   - extra homework, ideal elevator kinematics for hoomans?
 
 * The definition of *optimal* instructions (biggest assumption):

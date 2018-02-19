@@ -1,7 +1,7 @@
 module.exports = class Passenger {
-  constructor (startingFloor, elevator) {
+  constructor (elevator, startingFloor) {
     this.currentFloor = startingFloor;
-    this.hasReachedDestination = true; // true until passenger summons elevator
+    this.hasReachedDestination = false; // false until they reach their destination
     this.elevator = elevator;
   }
 
