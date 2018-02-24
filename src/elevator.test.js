@@ -1,11 +1,9 @@
 "use strict";
 
 const expect = require('chai').expect;
-const _ = require('lodash');
 
 const Elevator = require('./elevator');
 const Time = require('./time');
-
 const FLOORS = require('./floors');
 const { DISTANCE_BETWEEN_FLOORS, TIME_STEP, VELOCITY } = require('./physics');
 
