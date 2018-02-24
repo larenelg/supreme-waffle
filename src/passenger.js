@@ -1,7 +1,7 @@
 const ElevatorCommander = require('./elevatorCommander');
 const SummonElevatorCommand = require('./commands/SummonElevatorCommand');
 
-const {TIME_STEP, Time} = require('./physics');
+const {TIME_STEP} = require('./physics');
 module.exports = class Passenger {
   constructor (elevator, startingFloor) {
     this.elevatorCommander = new ElevatorCommander();
@@ -20,9 +20,9 @@ module.exports = class Passenger {
   }
 
   waitForDoorsToOpenAt (floor) {
-    var doorsOpen = poll(() => {
-        return this.elevator.doorsOpen === true;
-      }, TIME_STEP * 10, TIME_STEP);
+    // var doorsOpen = poll(() => {
+    //     return this.elevator.doorsOpen === true;
+    //   }, TIME_STEP * 10, TIME_STEP);
     return this;
   }
 

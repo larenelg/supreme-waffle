@@ -6,12 +6,6 @@ const TIME_STEP = 1;
 const DISTANCE_BETWEEN_FLOORS = 3; 
 const VELOCITY = 1;
 
-class Time {
-  constructor() {
-    
-  }
-}
-
 module.exports = {
-  TIME_STEP, DISTANCE_BETWEEN_FLOORS, VELOCITY, Time
+  TIME_STEP, DISTANCE_BETWEEN_FLOORS, VELOCITY
 }

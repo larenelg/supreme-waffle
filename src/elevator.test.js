@@ -2,20 +2,21 @@
 
 const expect = require('chai').expect;
 const _ = require('lodash');
+
 const Elevator = require('./elevator');
+const Time = require('./time');
 
 const FLOORS = require('./floors');
 const { DISTANCE_BETWEEN_FLOORS, TIME_STEP, VELOCITY } = require('./physics');
 
-const update = (elevator, numTimes) => {
-  _.times(numTimes, () => elevator.update());
-}
-
 describe('elevator', () => {
   var elevator;
+  var time;
 
   beforeEach(() => {
     elevator = new Elevator();
+    time = new Time();
+    time.subscribe(elevator);
   });
 
   it('always begins at G', () => {
@@ -25,20 +26,20 @@ describe('elevator', () => {
   it('travels up to 2 from G', () => {
     elevator.goToFloor('2');
 
-    elevator.update();
+    time.advance();
 
     expect(elevator.distanceToNextFloor).to.equal(2.0);
 
-    elevator.update();
+    time.advance();
 
     expect(elevator.distanceToNextFloor).to.equal(1.0);
 
-    elevator.update();
+    time.advance();
 
     expect(elevator.distanceToNextFloor).to.equal(3.0);
     expect(elevator.currentFloor).to.equal('1');
 
-    update(elevator, 3);
+    time.advance(3);
     
     expect(elevator.currentFloor).to.equal('2');
     expect(elevator.currentHeight).to.equal(2 * DISTANCE_BETWEEN_FLOORS)
@@ -53,7 +54,7 @@ describe('elevator', () => {
 
     elevator.goToFloor('G');
     
-    update(elevator, sixFloorDistance);
+    time.advance(sixFloorDistance);
 
     expect(elevator.currentFloor).to.equal('G');
   });
