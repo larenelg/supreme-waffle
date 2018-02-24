@@ -28,12 +28,18 @@ describe('elevator app', () => {
 
     // this is probably not the right design pattern, letting TDD sort it out later
     passenger.presses('Up')
-      // .waitForDoorsToOpenAt('G')
-      // .enterElevator()
+
+    expect(elevator.destinationFloor).to.equal('G');
+       
+    passenger.waitForDoorsToOpenAt('G')
+       .enterElevator()
+
+    expect(passenger.isInsideElevator).to.equal(true);
+    expect(elevator.currentFloor).to.equal('G');
+    expect(elevator.doorsOpen).to.equal(true);
       // .presses('5')
       // .waitForDoorsToOpenAt('5')
       // .exitElevator();
 
-    expect(elevator.destinationFloor).to.equal('G');
   });
 });

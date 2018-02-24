@@ -12,6 +12,7 @@ module.exports = class Elevator {
     this.destinationHeight = null;
     this.direction = null;
     this.currentTime = 0;
+    this.doorsOpen = false;
     this.distanceToNextFloor = DISTANCE_BETWEEN_FLOORS;
   }
 
