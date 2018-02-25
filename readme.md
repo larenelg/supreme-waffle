@@ -14,6 +14,10 @@ yarn install
 yarn test
 ```
 
+```
+yarn test --watch
+```
+
 ## Run app (doesn't do much)
 
 ```

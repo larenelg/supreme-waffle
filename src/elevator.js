@@ -2,18 +2,20 @@
 
 const FLOORS = require('./floors');
 const { DISTANCE_BETWEEN_FLOORS, TIME_STEP, VELOCITY } = require('./physics');
+const ElevatorEvents = require('./elevatorEvents');
 
 module.exports = class Elevator {
-  constructor() {
+  constructor(elevatorEvents) {
     this.isWaiting = true;
     this.currentFloor = FLOORS[0];
     this.currentHeight = 0;
     this.destinationFloor = null;
     this.destinationHeight = null;
     this.direction = null;
-    this.currentTime = 0;
     this.doorsOpen = false;
     this.distanceToNextFloor = DISTANCE_BETWEEN_FLOORS;
+    this._elevatorEvents = elevatorEvents;
+    this.availableFloors = FLOORS;
   }
 
   goToFloor(floor) {
@@ -24,16 +26,16 @@ module.exports = class Elevator {
   
     if (this.destinationHeight > this.currentHeight) {
       this.direction = 'up';
+      console.info('going up');
     } else if (this.destinationHeight < this.currentHeight) {
       this.direction = 'down';
+      console.info('going down');
     } else { // already at destination
       this.direction = null;
     }
   }
 
   update() {
-    this.currentTime += TIME_STEP;
-
     if (this.direction === null) return;
 
     var directionalVelocity = this.direction === 'up' ? VELOCITY : -1 * VELOCITY;
@@ -51,6 +53,9 @@ module.exports = class Elevator {
     if (this.currentFloor === this.destinationFloor) {
       this.destinationFloor = null;
       this.destinationHeight = null;
+      this.direction = null;
+      console.info(`at floor ${this.currentFloor}`)
+      this._elevatorEvents.emit('floorReached');
     }
   }
 }

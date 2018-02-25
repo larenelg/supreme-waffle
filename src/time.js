@@ -38,7 +38,9 @@ module.exports = class Time {
       this.oneTimeFunctions = [];
 
       // update continue observers
-      this.observers.forEach(observer => observer.update());
+      this.observers.forEach(observer => {
+        observer.update();
+      });
 
       this.currentTimeStep++; // should this go before or after updates? test!
     });

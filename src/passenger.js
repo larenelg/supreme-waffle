@@ -1,67 +1,54 @@
 const ElevatorCommander = require('./elevatorCommander');
+const ElevatorEvents = require('./elevatorEvents');
 const SummonElevatorCommand = require('./commands/SummonElevatorCommand');
-const {TIME_STEP} = require('./physics');
-
-/* PASSENGER HELPERS -- extract later */
-
-const poll = (fn, timeout, interval, time) => {
-  var endTimeStep = time.currentTimeStep + timeout;
-  console.log('finish polling at', endTimeStep);
-
-  var checkCondition = (resolve, reject) => {
-    var result = fn();
-
-    if (result) {
-      console.log('resolve');
-      resolve(result)
-    } 
-    else if (time.currentTimeStep < endTimeStep) {
-      console.log('go again');      
-      time.subscribeOnce(checkCondition);
-    }
-    else {
-      console.log('reject');
-      reject(new Error('Timed out.'));
-    }
-  };
-
-  return new Promise(checkCondition);
-};
-
-/* PASSENGER CLASS */
+const { TIME_STEP } = require('./physics');
 
 module.exports = class Passenger {
-  constructor (elevator, startingFloor, time) {
+  constructor (elevator, startingFloor, elevatorEvents) {
     this.elevatorCommander = new ElevatorCommander();
+    this._elevatorEvents = elevatorEvents;
+
     this._elevator = elevator;
-    this._time = time;
 
     this.currentFloor = startingFloor;
     this.hasReachedDestination = false; // false until they reach their destination
     this.isInsideElevator = false;
   }
 
-  presses (directionButton) {
-    this.elevatorCommander.storeAndExecute(
-      new SummonElevatorCommand(this._elevator, this.currentFloor)
-    )
+  presses (button) {
+    if (button === 'Up' || button === 'Down') {
+      // assume person is outside the elevator and waiting
+      this.elevatorCommander.storeAndExecute(
+        new SummonElevatorCommand(this._elevator, this.currentFloor)
+      )
+    } else if (this._elevator.availableFloors.includes(button)) {
+      var destination = button;
+      this.elevatorCommander.storeAndExecute(
+        new SummonElevatorCommand(this._elevator, destination)
+      )
+    } else {
+      throw new Error('Not a valid Elevator command.');
+    }
+    
     return this;
   }
 
-  waitAndEnterElevator () {
+  waitForElevatorAndEnter () {
     // wait for doors to open
-    poll(
-      () => {
-        return this._elevator.doorsOpen === this.currentFloor;
-      }, 
-      TIME_STEP * 10, 
-      TIME_STEP, 
-      this._time
-    )
-    .then(() => this.isInsideElevator = true)
-    .catch(() => console.log('tired of waiting, gave up :('));
+    this._elevatorEvents
+      .once('floorReached', () => { 
+        this.isInsideElevator = true;
+        console.log('entering elevator!');
+      })
+
     return this;
   }
 
-  exitElevator () { throw new Error('Not Implemented Yet'); }
+  waitsForElevatorToReachFloorAndExits () { 
+    this._elevatorEvents
+      .once('floorReached', () => { 
+        this.isInsideElevator = false;
+        console.log('exiting elevator!');
+      }) 
+  } 
 }

@@ -3,7 +3,7 @@
 const lift = require('./elevator');
 
 const app = () => {
-  console.log("Elevator program");
+  console.info("Elevator program");
 }
 
 app();
