@@ -31,24 +31,26 @@ describe('elevator app', () => {
     expect(elevator.isWaiting).to.equal(true);
   });
 
-  it('test case 1: passenger travels from 2 to G', () => {
-    var passenger = new Passenger(elevator, '2', elevatorEvents);
-    var timeFromGToTwo = 2 * DISTANCE_BETWEEN_FLOORS * TIME_STEP;
+  it('test case 1: passenger travels from G to 5', () => {
+    var passenger = new Passenger(elevator, 'G', elevatorEvents);
+    var groundToFiveDistance = 5 * DISTANCE_BETWEEN_FLOORS * TIME_STEP;
 
-    passenger.presses('Down').waitForElevatorAndEnter();
+    passenger.presses('Up').waitForElevatorAndEnter();
 
-    expect(elevator.destinationFloor).to.equal('2');
-    expect(passenger.isInsideElevator).to.equal(false);
-    
-    time.advance(timeFromGToTwo);
-    
-    expect(passenger.isInsideElevator).to.equal(true);
-
-    passenger.presses('G').waitsForElevatorToReachFloorAndExits();
-    
-    time.advance(timeFromGToTwo);
-
+    expect(elevator.destinationFloor).to.equal('G');
     expect(elevator.currentFloor).to.equal('G');
+    expect(passenger.isInsideElevator).to.be.false;
+    
+    time.advance();
+    
+    expect(passenger.isInsideElevator).to.be.true;
+
+    passenger.presses('5').waitsForElevatorToReachFloorAndExits();
+
+    time.advance(groundToFiveDistance);
+
+    expect(elevator.currentFloor).to.equal('5');
+    expect(passenger.currentFloor).to.equal('5');
     expect(passenger.isInsideElevator).to.be.false;
   });
 });

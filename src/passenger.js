@@ -22,14 +22,16 @@ module.exports = class Passenger {
         new SummonElevatorCommand(this._elevator, this.currentFloor)
       )
     } else if (this._elevator.availableFloors.includes(button)) {
+      // has pushed a button inside the elevator
       var destination = button;
+
       this.elevatorCommander.storeAndExecute(
         new SummonElevatorCommand(this._elevator, destination)
       )
     } else {
       throw new Error('Not a valid Elevator command.');
     }
-    
+
     return this;
   }
 
@@ -46,9 +48,12 @@ module.exports = class Passenger {
 
   waitsForElevatorToReachFloorAndExits () { 
     this._elevatorEvents
-      .once('floorReached', () => { 
+      .once('floorReached', () => {
         this.isInsideElevator = false;
+        this.currentFloor = this._elevator.currentFloor;
         console.log('exiting elevator!');
-      }) 
+      });
+
+    return this;
   } 
 }

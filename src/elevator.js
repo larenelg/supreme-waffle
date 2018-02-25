@@ -6,56 +6,62 @@ const ElevatorEvents = require('./elevatorEvents');
 
 module.exports = class Elevator {
   constructor(elevatorEvents) {
-    this.isWaiting = true;
-    this.currentFloor = FLOORS[0];
-    this.currentHeight = 0;
-    this.destinationFloor = null;
-    this.destinationHeight = null;
-    this.direction = null;
-    this.doorsOpen = false;
-    this.distanceToNextFloor = DISTANCE_BETWEEN_FLOORS;
+    // constants
     this._elevatorEvents = elevatorEvents;
     this.availableFloors = FLOORS;
+
+    // initial values
+    this.currentFloor = FLOORS[0];
+    this.currentHeight = 0.0;
+    this._resetElevator();
   }
 
   goToFloor(floor) {
     this.isWaiting = false;
     this.destinationFloor = floor;
-    
     this.destinationHeight = FLOORS.indexOf(floor) * DISTANCE_BETWEEN_FLOORS;
-  
-    if (this.destinationHeight > this.currentHeight) {
+    this.velocity = Math.sign(this.destinationHeight - this.currentHeight) * VELOCITY;
+
+    if (this.velocity > 0) {
       this.direction = 'up';
       console.info('going up');
-    } else if (this.destinationHeight < this.currentHeight) {
+    } else if (this.velocity < 0) {
       this.direction = 'down';
       console.info('going down');
-    } else { // already at destination
+    } else { 
+      // already at destination
       this.direction = null;
     }
   }
 
   update() {
-    if (this.direction === null) return;
-
-    var directionalVelocity = this.direction === 'up' ? VELOCITY : -1 * VELOCITY;
+    if (this.destinationFloor === null) return;
 
     if (this.distanceToNextFloor !== 0) {
       this.distanceToNextFloor -= VELOCITY * TIME_STEP;
-      this.currentHeight += TIME_STEP * directionalVelocity;
+      this.currentHeight += TIME_STEP * this.velocity;
     }
 
     if (this.distanceToNextFloor === 0) {
       this.currentFloor = FLOORS[this.currentHeight / DISTANCE_BETWEEN_FLOORS]
+      console.log(`${this.currentFloor}`);
       this.distanceToNextFloor = DISTANCE_BETWEEN_FLOORS;
     }
 
     if (this.currentFloor === this.destinationFloor) {
-      this.destinationFloor = null;
-      this.destinationHeight = null;
-      this.direction = null;
+      this._resetElevator();
       console.info(`at floor ${this.currentFloor}`)
       this._elevatorEvents.emit('floorReached');
     }
+  }
+
+  _resetElevator() {
+    // initial values
+    this.isWaiting = true;
+    this.direction = null;
+    this.distanceToNextFloor = DISTANCE_BETWEEN_FLOORS;
+    this.destinationFloor = null;
+    this.destinationHeight = null;
+    this.velocity = 0.0;
   }
 }

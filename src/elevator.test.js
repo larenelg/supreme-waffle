@@ -25,42 +25,39 @@ describe('elevator', () => {
     expect(elevator.currentFloor).to.equal('G');
   });
 
-  it('travels up to 2 from G', () => {
+  it('travels from G from 2', () => {
+    const oneFloorDistance = 1 * DISTANCE_BETWEEN_FLOORS * TIME_STEP / VELOCITY;
+    
     var floorReachedHandler = sinon.spy();
     elevatorEvents.on('floorReached', floorReachedHandler);
 
     elevator.goToFloor('2');
 
-    time.advance();
+    expect(elevator.isWaiting).to.be.false;
 
-    expect(elevator.distanceToNextFloor).to.equal(2.0);
+    time.advance(oneFloorDistance);
+    console.log(`****** ${elevator.currentFloor}`);
 
-    time.advance();
-
-    expect(elevator.distanceToNextFloor).to.equal(1.0);
-
-    time.advance();
-
-    expect(elevator.distanceToNextFloor).to.equal(3.0);
     expect(elevator.currentFloor).to.equal('1');
 
-    time.advance(3);
+    time.advance(oneFloorDistance);
     
+    expect(elevator.currentFloor).to.equal('2');
+    expect(elevator.currentHeight).to.equal(2 * DISTANCE_BETWEEN_FLOORS);
+    expect(elevator.isWaiting).to.be.true;
+
+    time.advance(oneFloorDistance); // doesn't go past second
+
     expect(elevator.currentFloor).to.equal('2');
     expect(elevator.currentHeight).to.equal(2 * DISTANCE_BETWEEN_FLOORS)
     expect(floorReachedHandler.calledOnce).to.be.true;
-
-    time.advance(3);
-
-    expect(elevator.currentFloor).to.equal('2');
-    expect(elevator.currentHeight).to.equal(2 * DISTANCE_BETWEEN_FLOORS)
   });
 
   it('travels down from 6 to G', () => {
     var floorReachedHandler = sinon.spy();
     elevatorEvents.on('floorReached', floorReachedHandler);
 
-    const sixFloorDistance = 6 * DISTANCE_BETWEEN_FLOORS;
+    const sixFloorDistance = 6 * DISTANCE_BETWEEN_FLOORS * TIME_STEP / VELOCITY;
     
     // these shouldn't be exposed, and should be linked together with setters
     elevator.currentFloor = FLOORS[6]
@@ -72,5 +69,31 @@ describe('elevator', () => {
 
     expect(elevator.currentFloor).to.equal('G');
     expect(floorReachedHandler.calledOnce).to.be.true;    
+
+    time.advance();
+
+    expect(elevator.currentFloor).to.equal('G');
+    expect(floorReachedHandler.calledOnce).to.be.true; 
+  });
+
+  it('travels from G to 6 to G', () => {
+    var floorReachedHandler = sinon.spy();
+    elevatorEvents.on('floorReached', floorReachedHandler);
+
+    const sixFloorDistance = 6 * DISTANCE_BETWEEN_FLOORS * TIME_STEP / VELOCITY;
+
+    elevator.goToFloor('6');
+    
+    time.advance(sixFloorDistance);
+
+    expect(elevator.currentFloor).to.equal('6');
+    expect(floorReachedHandler.calledOnce).to.be.true;    
+
+    elevator.goToFloor('G');
+
+    time.advance(sixFloorDistance);
+
+    expect(elevator.currentFloor).to.equal('G');
+    expect(floorReachedHandler.calledTwice).to.be.true; 
   });
 });
