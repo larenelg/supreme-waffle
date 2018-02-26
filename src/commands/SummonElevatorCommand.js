@@ -6,6 +6,6 @@ module.exports = class SummonElevatorCommand {
   }
 
   execute() {
-    this._elevator.goToFloor(this._floor);
+    this._elevator.receivesRequest(this._floor, this._direction);
   }
 };

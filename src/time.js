@@ -29,7 +29,7 @@ module.exports = class Time {
 
   // what happens if an observer is subscribed between these updates?
   // need to write a test...
-  advance(numTimes) {
+  advance(numTimes, callback) {
     var _numTimes = numTimes || 1;
 
     _.times(_numTimes, () => {
@@ -43,6 +43,11 @@ module.exports = class Time {
       });
 
       this.currentTimeStep++; // should this go before or after updates? test!
+
+      // for debugging
+      if (callback) {
+        callback();
+      }
     });
   }
 }

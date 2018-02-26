@@ -11,22 +11,23 @@ module.exports = class Passenger {
     this._elevator = elevator;
 
     this.currentFloor = startingFloor;
+    this.destinationFloor = null;    
     this.hasReachedDestination = false; // false until they reach their destination
     this.isInsideElevator = false;
   }
 
   presses (button) {
-    if (button === 'Up' || button === 'Down') {
+    if ((!this.isInsideElevator) && (button === 'up' || button === 'down')) {
       // assume person is outside the elevator and waiting
       this.elevatorCommander.storeAndExecute(
-        new SummonElevatorCommand(this._elevator, this.currentFloor)
+        new SummonElevatorCommand(this._elevator, this.currentFloor, button)
       )
-    } else if (this._elevator.availableFloors.includes(button)) {
+    } else if (this.isInsideElevator && this._elevator.availableFloors.includes(button)) {
       // has pushed a button inside the elevator
-      var destination = button;
+      this.destinationFloor = button;
 
       this.elevatorCommander.storeAndExecute(
-        new SummonElevatorCommand(this._elevator, destination)
+        new SummonElevatorCommand(this._elevator, this.destinationFloor, 'destination')
       )
     } else {
       throw new Error('Not a valid Elevator command.');
@@ -35,12 +36,12 @@ module.exports = class Passenger {
     return this;
   }
 
-  waitForElevatorAndEnter () {
+  waitsForElevatorAndEnters () {
     // wait for doors to open
     this._elevatorEvents
-      .once('floorReached', () => { 
+      .once(`floorReached:${this.currentFloor}`, () => { 
         this.isInsideElevator = true;
-        console.log('entering elevator!');
+        console.info(`enterting elevator at ${this.currentFloor}`);
       })
 
     return this;
@@ -48,10 +49,11 @@ module.exports = class Passenger {
 
   waitsForElevatorToReachFloorAndExits () { 
     this._elevatorEvents
-      .once('floorReached', () => {
+      .once(`floorReached:${this.destinationFloor}`, () => {
         this.isInsideElevator = false;
         this.currentFloor = this._elevator.currentFloor;
-        console.log('exiting elevator!');
+        this.hasReachedDestination = true;
+        console.info(`exiting elevator at ${this.currentFloor}`);
       });
 
     return this;
